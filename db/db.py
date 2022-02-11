@@ -1,17 +1,29 @@
 import psycopg2
+import os
+from dotenv import load_dotenv
 
-# Connection to DDBB for creating new table if not exists
+load_dotenv()
 
+
+# Creating connection to Database
+
+
+def create_connection():
+    connection = psycopg2.connect(
+        dbname=os.getenv('PG_DBNAME'),
+        user=os.getenv('PG_USER'),
+        password=os.getenv('PG_PASS'),
+        host=os.getenv('PG_HOST'),
+        port=os.getenv('PG_PORT'))
+    return connection
+
+
+# Creating new table if not exists
 
 def create_table():
     try:
         # Connect to Database
-        conn = psycopg2.connect(
-            dbname="data",
-            user="postgres",
-            password="1234567890",
-            host="localhost",
-            port="5432")
+        conn = create_connection()
         cursor = conn.cursor()
 
         # SQL Command for creating table
@@ -24,33 +36,28 @@ def create_table():
         # Inserting and Executing Query
         cursor.execute(sql)
         conn.commit()
-        print("Table loaded successfully!")
+        print("Connection to Database successfully!")
 
-        # Closing connection
         conn.close()
+
     except:
-        raise Exception("Error while connecting to Database")
+        print("Error while connecting to Database")
 
-# Connection to DDBB to register new user
 
+# Connection to DDBB to insert data
 
 def insert_data(name, value):
-
-    # Connect to Database
-    conn = psycopg2.connect(
-            dbname="data",
-            user="postgres",
-            password="1234567890",
-            host="localhost",
-            port="5432")
-    cursor = conn.cursor()
-
-    # Inserting and Executing Query
     try:
-        cursor.execute("INSERT INTO {} VALUES (%s, %s)".format('data'), (name, value,))
-        conn.commit()
-    except:
-        print("Couldn't insert values")
+        # Connect to Database
+        conn = create_connection()
+        cursor = conn.cursor()
 
-    # Closing Connection
-    conn.close()
+        # Inserting and Executing Query
+        db_name = os.getenv('PG_DBNAME')
+        cursor.execute("INSERT INTO {} VALUES (%s, %s)".format(db_name), (name, value,))
+        conn.commit()
+
+        conn.close()
+
+    except:
+        print("Couldn't insert values to Database")
