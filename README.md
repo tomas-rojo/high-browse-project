@@ -3,7 +3,7 @@
 ## Clone the Repo :arrow_down_small:
 
 ```
-git clone https://github.com/tomas-rojo/high-browse-project
+git clone https://github.com/tomas-rojo/high-browse-project.git
 ```
 
 ## Install the requirements.txt :hammer_and_wrench:
