@@ -1,4 +1,4 @@
-# High Browse Challenge :fire:
+# High-Browse Challenge :fire:
 
 ## Clone the Repo :arrow_down_small:
 
